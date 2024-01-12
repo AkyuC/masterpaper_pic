@@ -11,7 +11,7 @@ lifetime = np.loadtxt("acoFinishTime")
 
 x = np.arange(len(lifetime))
 plt.plot(x, lifetime, label="ACO")
-plt.plot(x, np.ones(len(lifetime))*279.5199, label="Option")
+plt.plot(x, np.ones(len(lifetime))*282.35, label="Optimal")
 plt.ylabel("完成时间 / 秒")
 plt.xlabel("迭代次数")
 plt.tick_params(axis='x', length=6, width=2)
