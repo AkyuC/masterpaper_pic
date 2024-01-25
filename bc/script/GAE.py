@@ -22,3 +22,23 @@ plt.yticks([300,400,500,600,700])
 plt.legend()
 plt.savefig("GAE_compared.png", bbox_inches='tight', pad_inches=0.05, dpi=600)
 plt.close('all')
+
+plt.figure(figsize=(10,3))
+
+# avg_finished_time = np.loadtxt("avg_finished_time7.0")
+avg_finished_time_decpomdp = np.loadtxt("avg_finished_time8.0")
+datalen = 6010
+plt.plot(np.arange(datalen), avg_finished_time_decpomdp[:datalen], label="DecPOMDP", linewidth = 2, alpha = 0.75)
+plt.plot(np.arange(datalen), np.ones(datalen)*282.35, label="Optimal", alpha = 0.75, linewidth = 2)
+plt.plot(np.arange(datalen), np.ones(datalen)*281.72, label="Ours", alpha = 0.75, linewidth = 2)
+plt.plot(np.arange(datalen), np.ones(datalen)*362.6101, label="Nearest", alpha = 0.75, linewidth = 2)
+plt.plot(np.arange(datalen), np.ones(datalen)*340.8067, label="Partition Nearest", alpha = 0.75, linewidth = 2)
+plt.plot(np.arange(datalen), np.ones(datalen)*701.6326, label="Partition Random", alpha = 0.75, linewidth = 2)
+
+
+plt.ylabel("完成时间 / 秒")
+plt.xlabel("训练回合")
+plt.yticks([300,400,500,600,700])
+plt.legend()
+plt.savefig("DecPOMDP_compared.png", bbox_inches='tight', pad_inches=0.05, dpi=600)
+plt.close('all')
