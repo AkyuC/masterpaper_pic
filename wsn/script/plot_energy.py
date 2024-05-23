@@ -5,20 +5,89 @@ plt.rcParams['font.sans-serif'] = 'SimSun'
 plt.rcParams['font.serif'] = 'Times New Roman'
 plt.rcParams['font.size'] = 15
 
+colors =['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+
 plt.figure(figsize=(10,4))
 
-DRED = np.loadtxt("energy_data/DRED_total_energy")/0.15*100/20
-print(DRED[-1])
-Greedy1 = np.loadtxt("energy_data/MaxEnergy_total_energy")/0.15*100/20
-Greedy2 = np.loadtxt("energy_data/Greedy_total_energy")/0.15*100/20
-Random = np.loadtxt("energy_data/Random_total_energy")/0.15*100/20
-Static = np.loadtxt("energy_data/Static_n12_total_energy")/0.15*100/20
+# DRED = np.loadtxt("energy_data/DRED_total_energy")/0.15*100/20
+# print(DRED[-1])
+# Greedy1 = np.loadtxt("energy_data/MaxEnergy_total_energy")/0.15*100/20
+# Greedy2 = np.loadtxt("energy_data/Greedy_total_energy")/0.15*100/20
+# Random = np.loadtxt("energy_data/Random_total_energy")/0.15*100/20
+# Static = np.loadtxt("energy_data/Static_n12_total_energy")/0.15*100/20
 
-plt.plot(np.linspace(10, len(DRED)*10, len(DRED)), DRED, label="DRED")
-plt.plot(np.linspace(10, len(Greedy1)*10, len(Greedy1)), Greedy1, label='Greedy1')
-plt.plot(np.linspace(10, len(Greedy2)*10, len(Greedy2)), Greedy2, label='Greedy2')
-plt.plot(np.linspace(10, len(Random)*10, len(Random)), Random, label='Random')
-plt.plot(np.linspace(10, len(Static)*10, len(Static)), Static, label='Static')
+# plt.plot(np.linspace(10, len(DRED)*10, len(DRED)), DRED, label="DRED")
+# plt.plot(np.linspace(10, len(Greedy1)*10, len(Greedy1)), Greedy1, label='Greedy1')
+# plt.plot(np.linspace(10, len(Greedy2)*10, len(Greedy2)), Greedy2, label='Greedy2')
+# plt.plot(np.linspace(10, len(Random)*10, len(Random)), Random, label='Random')
+# plt.plot(np.linspace(10, len(Static)*10, len(Static)), Static, label='Static')
+
+DRED = []
+Greedy1 = []
+Greedy2 = []
+Random = []
+Static = []
+
+for i in range(10):
+    DRED.append(np.loadtxt(f"energy_data/energy_data/DRED_total_energy{i+1}"))
+    Greedy1.append(np.loadtxt(f"energy_data/energy_data/MaxEnergy_total_energy{i+1}"))
+    Greedy2.append(np.loadtxt(f"energy_data/energy_data/Greedy_total_energy{i+1}"))
+    Random.append(np.loadtxt(f"energy_data/energy_data/Random_total_energy{i+1}"))
+    Static.append(np.loadtxt(f"energy_data/energy_data/Static_n12_total_energy{i+1}"))
+
+# l = min([len(DRED[i]) for i in range(10)])
+# for i in range(10):
+#     DRED[i] = DRED[i][:l]
+# l = min([len(Greedy1[i]) for i in range(10)])
+# for i in range(10):
+#     Greedy1[i] = Greedy1[i][:l]
+# l = min([len(Greedy2[i]) for i in range(10)])
+# for i in range(10):
+#     Greedy2[i] = Greedy2[i][:l]
+# l = min([len(Random[i]) for i in range(10)])
+# for i in range(10):
+#     Random[i] = Random[i][:l]
+# l = min([len(Static[i]) for i in range(10)])
+# for i in range(10):
+#     Static[i] = Static[i][:l]
+
+def get_max_mean_min(seq):
+    d = []
+    for i in range(len(seq)):
+        d.append(len(seq[i]))
+    max_values = []
+    mean_values = []
+    min_values = []
+    max_d = max(d)
+    for i in range(max_d): 
+        l = []
+        for j in range(len(seq)):
+            if i < d[j]:
+                l.append(seq[j][i])
+        max_values.append(max(l))
+        mean_values.append(np.mean(l))
+        min_values.append(min(l))
+    return max_values, mean_values, min_values
+
+max_values, mean_values, min_values = get_max_mean_min(DRED)
+plt.plot(np.linspace(10, len(mean_values)*10, len(mean_values)), mean_values, label="DRED", color=colors[0])
+plt.fill_between(np.linspace(10, len(mean_values)*10, len(mean_values)), min_values, max_values, color=colors[0], alpha=0.3, edgecolor='none')
+
+max_values, mean_values, min_values = get_max_mean_min(Greedy1)
+plt.plot(np.linspace(10, len(mean_values)*10, len(mean_values)), mean_values, label="Greedy1", color=colors[1])
+plt.fill_between(np.linspace(10, len(mean_values)*10, len(mean_values)), min_values, max_values, color=colors[1], alpha=0.3, edgecolor='none')
+
+max_values, mean_values, min_values = get_max_mean_min(Greedy2)
+plt.plot(np.linspace(10, len(mean_values)*10, len(mean_values)), mean_values, label="Greedy2", color=colors[2])
+plt.fill_between(np.linspace(10, len(mean_values)*10, len(mean_values)), min_values, max_values, color=colors[2], alpha=0.3, edgecolor='none')
+
+max_values, mean_values, min_values = get_max_mean_min(Random)
+plt.plot(np.linspace(10, len(mean_values)*10, len(mean_values)), mean_values, label="Random", color=colors[3])
+plt.fill_between(np.linspace(10, len(mean_values)*10, len(mean_values)), min_values, max_values, color=colors[3], alpha=0.3, edgecolor='none')
+
+max_values, mean_values, min_values = get_max_mean_min(Static)
+plt.plot(np.linspace(10, len(mean_values)*10, len(mean_values)), mean_values, label="Static", color=colors[4])
+plt.fill_between(np.linspace(10, len(mean_values)*10, len(mean_values)), min_values, max_values, color=colors[4], alpha=0.3, edgecolor='none')
 
 
 plt.xlabel('存活时间 / 轮')
@@ -57,8 +126,6 @@ Greedy2 = np.loadtxt("energy_data/Greedy_node_energy_range")/0.15*100
 Random = np.loadtxt("energy_data/Random_node_energy_range")/0.15*100
 Static = np.loadtxt("energy_data/Static_n12_energy_range")/0.15*100
 
-colors =['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-
 plt.plot(np.linspace(10, len(DRED)*10, len(DRED)), DRED[:,0], label="DRED", color=colors[0])
 plt.fill_between(np.linspace(10, len(DRED)*10, len(DRED)), DRED[:,2], DRED[:,1], color=colors[0], alpha=0.3, edgecolor='none')
 
@@ -83,12 +150,12 @@ plt.savefig("node_energy_range.png", bbox_inches='tight', pad_inches=0.05, dpi=6
 plt.cla()
 
 
-countEnd = []
-for i in range(20):
-    DRED = np.loadtxt(f"energy_data/DRED_node{i}_energy")/0.15*100
-    countEnd.append(DRED[-1])
-print(countEnd)
+# countEnd = []
+# for i in range(20):
+#     DRED = np.loadtxt(f"energy_data/DRED_node{i}_energy")/0.15*100
+#     countEnd.append(DRED[-1])
+# print(countEnd)
 
-DRED_died = np.array([0.0033675333020001673, 0.0040385339899994465, 0.0008906902590000729, 0.004415023960999743, 0.004327634480000042, 0.0022826615479999914, 0.003334505723000799, 0.003714366422000659, 0.0053679856590001475, 0.0038430728549998967, 0.004873974379000091, 0.003601975363000291, 0.0056789042750001635, 0.004442037088999687, 0.004959119830999524, 0.0048145064980002795, 0.0027660124810002574, 0.00226219456899983, 0.004037684322999373])
-print(np.mean(DRED_died)/0.15*100, max(DRED_died)/0.15*100, min(DRED_died)/0.15*100)
-print(np.mean(DRED_died), max(DRED_died), min(DRED_died))
+# DRED_died = np.array([0.0033675333020001673, 0.0040385339899994465, 0.0008906902590000729, 0.004415023960999743, 0.004327634480000042, 0.0022826615479999914, 0.003334505723000799, 0.003714366422000659, 0.0053679856590001475, 0.0038430728549998967, 0.004873974379000091, 0.003601975363000291, 0.0056789042750001635, 0.004442037088999687, 0.004959119830999524, 0.0048145064980002795, 0.0027660124810002574, 0.00226219456899983, 0.004037684322999373])
+# print(np.mean(DRED_died)/0.15*100, max(DRED_died)/0.15*100, min(DRED_died)/0.15*100)
+# print(np.mean(DRED_died), max(DRED_died), min(DRED_died))
